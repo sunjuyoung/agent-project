@@ -10,3 +10,5 @@ wheels/
 .venv
 .env
 *.md
+services/
+schemas/

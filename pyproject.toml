@@ -1,0 +1,21 @@
+[project]
+name = "interview-fastapi-agent"
+version = "0.1.0"
+description = "CrewAI 기반 모의면접 AI 오케스트레이션 서비스"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[all]>=0.128.5",
+    "uvicorn[standard]>=0.34.0",
+    "crewai[tools]>=1.9.3",  
+    "langchain>=0.3.0",
+    "langchain-openai>=0.3.0",
+    "langchain-postgres>=0.0.13",
+    "pgvector>=0.3.0",
+    "psycopg[binary,pool]>=3.2.0",
+    "pydantic>=2.10.0",
+    "pydantic-settings>=2.0.0",
+    "python-dotenv>=1.0.0",
+    "pdfplumber>=0.11.0",
+    "firecrawl-py==3.4.0",
+]
