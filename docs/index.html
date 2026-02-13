@@ -1,0 +1,1992 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>AI Interview Coach — Project Portfolio</title>
+    <style>
+      /* ============ Reset & Base ============ */
+      :root {
+        --bg: #fafbfc;
+        --card: #ffffff;
+        --text-1: #1a1a2e;
+        --text-2: #4b5563;
+        --text-3: #9ca3af;
+        --border: #e5e7eb;
+        --divider: #f3f4f6;
+        --blue: #3b82f6;
+        --blue-bg: #eff6ff;
+        --blue-border: #dbeafe;
+        --green: #10b981;
+        --green-bg: #ecfdf5;
+        --green-border: #d1fae5;
+        --amber: #f59e0b;
+        --amber-bg: #fffbeb;
+        --amber-border: #fef3c7;
+        --purple: #8b5cf6;
+        --purple-bg: #f5f3ff;
+        --purple-border: #ede9fe;
+        --red: #ef4444;
+        --red-bg: #fef2f2;
+        --red-border: #fee2e2;
+        --shadow-sm:
+          0 1px 3px rgba(0, 0, 0, 0.06), 0 1px 2px rgba(0, 0, 0, 0.04);
+        --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.08);
+        --radius: 12px;
+        --radius-sm: 8px;
+      }
+
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        font-family:
+          "Pretendard",
+          -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          sans-serif;
+        background: var(--bg);
+        color: var(--text-2);
+        line-height: 1.7;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      /* ============ Typography ============ */
+      h1,
+      h2,
+      h3 {
+        color: var(--text-1);
+      }
+      code,
+      .mono {
+        font-family: "SF Mono", "Fira Code", "Consolas", monospace;
+      }
+
+      /* ============ Layout ============ */
+      .container {
+        max-width: 1140px;
+        margin: 0 auto;
+        padding: 0 24px;
+      }
+      .section {
+        padding: 80px 0;
+      }
+      .section + .section {
+        border-top: 1px solid var(--divider);
+      }
+      .section-label {
+        font-size: 0.75rem;
+        font-weight: 600;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        margin-bottom: 8px;
+      }
+      .section-title {
+        font-size: 1.6rem;
+        font-weight: 700;
+        margin-bottom: 12px;
+      }
+      .section-desc {
+        color: var(--text-3);
+        font-size: 0.95rem;
+        margin-bottom: 40px;
+        max-width: 600px;
+      }
+
+      /* ============ Navigation ============ */
+      .nav {
+        position: sticky;
+        top: 0;
+        z-index: 100;
+        background: rgba(250, 251, 252, 0.85);
+        backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--border);
+        transition: box-shadow 0.3s;
+      }
+      .nav.scrolled {
+        box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06);
+      }
+      .nav-inner {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        height: 56px;
+      }
+      .nav-logo {
+        font-size: 0.95rem;
+        font-weight: 700;
+        color: var(--text-1);
+        text-decoration: none;
+      }
+      .nav-links {
+        display: flex;
+        gap: 4px;
+        list-style: none;
+        overflow-x: auto;
+      }
+      .nav-links a {
+        display: block;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+        font-weight: 500;
+        color: var(--text-3);
+        text-decoration: none;
+        border-radius: 6px;
+        transition: all 0.2s;
+        white-space: nowrap;
+      }
+      .nav-links a:hover,
+      .nav-links a.active {
+        color: var(--text-1);
+        background: var(--divider);
+      }
+
+      /* ============ Hero ============ */
+      .hero {
+        padding: 100px 0 80px;
+        text-align: center;
+      }
+      .hero-badge {
+        display: inline-block;
+        padding: 4px 14px;
+        background: var(--blue-bg);
+        color: var(--blue);
+        font-size: 0.78rem;
+        font-weight: 600;
+        border-radius: 20px;
+        margin-bottom: 20px;
+      }
+      .hero h1 {
+        font-size: 2.8rem;
+        font-weight: 800;
+        letter-spacing: -0.5px;
+        margin-bottom: 16px;
+      }
+      .hero-sub {
+        font-size: 1.15rem;
+        color: var(--text-3);
+        max-width: 560px;
+        margin: 0 auto 36px;
+        line-height: 1.7;
+      }
+      .hero-stats {
+        display: flex;
+        justify-content: center;
+        gap: 12px;
+        flex-wrap: wrap;
+      }
+      .stat {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        padding: 10px 20px;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        box-shadow: var(--shadow-sm);
+      }
+      .stat-num {
+        font-size: 1.3rem;
+        font-weight: 800;
+        color: var(--text-1);
+      }
+      .stat-label {
+        font-size: 0.78rem;
+        color: var(--text-3);
+      }
+
+      /* ============ Cards ============ */
+      .card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 28px;
+        box-shadow: var(--shadow-sm);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      .card-icon {
+        width: 44px;
+        height: 44px;
+        border-radius: 10px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        margin-bottom: 16px;
+      }
+      .card h3 {
+        font-size: 1.05rem;
+        font-weight: 600;
+        margin-bottom: 8px;
+      }
+      .card p {
+        font-size: 0.88rem;
+        color: var(--text-2);
+        line-height: 1.65;
+      }
+
+      /* ============ Grid ============ */
+      .grid-2 {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 16px;
+      }
+      .grid-3 {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 16px;
+      }
+      .grid-auto {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 16px;
+      }
+
+      /* ============ Tags / Pills ============ */
+      .tag {
+        display: inline-block;
+        padding: 3px 10px;
+        background: var(--divider);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.75rem;
+        color: var(--text-2);
+      }
+
+      /* ============ Intro Cards ============ */
+      .intro-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+      }
+      .intro-card {
+        padding: 32px;
+      }
+      .intro-card .card-icon.blue {
+        background: var(--blue-bg);
+      }
+      .intro-card .card-icon.amber {
+        background: var(--amber-bg);
+      }
+      .intro-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 16px;
+      }
+
+      /* ============ Architecture Diagram ============ */
+      .arch-stack {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+      }
+      .arch-row {
+        display: flex;
+        gap: 16px;
+      }
+      .arch-box {
+        flex: 1;
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px 24px;
+        box-shadow: var(--shadow-sm);
+        min-width: 0;
+      }
+      .arch-box.frontend {
+        border-left: 4px solid var(--blue);
+      }
+      .arch-box.backend {
+        border-left: 4px solid var(--green);
+      }
+      .arch-box.ai {
+        border-left: 4px solid var(--amber);
+      }
+      .arch-box.data {
+        border-left: 4px solid var(--purple);
+      }
+      .arch-box.external {
+        border-left: 4px solid var(--red);
+      }
+
+      .arch-label {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 6px;
+      }
+      .arch-box.frontend .arch-label {
+        color: var(--blue);
+      }
+      .arch-box.backend .arch-label {
+        color: var(--green);
+      }
+      .arch-box.ai .arch-label {
+        color: var(--amber);
+      }
+      .arch-box.data .arch-label {
+        color: var(--purple);
+      }
+      .arch-box.external .arch-label {
+        color: var(--red);
+      }
+
+      .arch-title {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--text-1);
+        margin-bottom: 4px;
+      }
+      .arch-tech {
+        font-size: 0.78rem;
+        color: var(--text-3);
+        margin-bottom: 10px;
+      }
+      .arch-items {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+      }
+      .arch-item {
+        padding: 3px 9px;
+        background: var(--divider);
+        border: 1px solid var(--border);
+        border-radius: 5px;
+        font-size: 0.72rem;
+        color: var(--text-2);
+      }
+
+      .arch-arrow {
+        display: flex;
+        justify-content: center;
+        padding: 10px 0;
+        gap: 48px;
+      }
+      .arrow-unit {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+      }
+      .arrow-line {
+        width: 2px;
+        height: 18px;
+        background: var(--border);
+      }
+      .arrow-tip {
+        color: var(--text-3);
+        font-size: 0.85rem;
+        line-height: 1;
+      }
+      .arrow-text {
+        font-size: 0.65rem;
+        color: var(--text-3);
+        font-weight: 500;
+      }
+
+      /* ============ Agent Flow ============ */
+      .flow-wrap {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 32px;
+        box-shadow: var(--shadow-sm);
+        overflow-x: auto;
+      }
+      .phase-groups {
+        display: flex;
+        gap: 20px;
+        min-width: max-content;
+        padding: 8px 0;
+      }
+      .phase-group {
+        border: 2px dashed var(--border);
+        border-radius: 16px;
+        padding: 20px 16px 16px;
+        position: relative;
+      }
+      .phase-label {
+        position: absolute;
+        top: -11px;
+        left: 16px;
+        background: var(--card);
+        padding: 0 8px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        color: var(--text-3);
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+      .phase-agents {
+        display: flex;
+        align-items: flex-start;
+        gap: 0;
+      }
+      .agent-node {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        min-width: 155px;
+      }
+      .agent-icon {
+        width: 52px;
+        height: 52px;
+        border-radius: 14px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.4rem;
+        margin-bottom: 10px;
+        border: 2px solid;
+      }
+      .agent-icon.blue {
+        background: var(--blue-bg);
+        border-color: var(--blue);
+      }
+      .agent-icon.green {
+        background: var(--green-bg);
+        border-color: var(--green);
+      }
+      .agent-icon.amber {
+        background: var(--amber-bg);
+        border-color: var(--amber);
+      }
+      .agent-icon.purple {
+        background: var(--purple-bg);
+        border-color: var(--purple);
+      }
+      .agent-icon.red {
+        background: var(--red-bg);
+        border-color: var(--red);
+      }
+
+      .agent-name {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-1);
+        margin-bottom: 2px;
+        text-align: center;
+      }
+      .agent-role {
+        font-size: 0.7rem;
+        color: var(--text-3);
+        text-align: center;
+        margin-bottom: 10px;
+      }
+      .agent-detail {
+        background: var(--divider);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 10px 12px;
+        font-size: 0.7rem;
+        color: var(--text-2);
+        max-width: 150px;
+        line-height: 1.5;
+      }
+      .agent-detail strong {
+        color: var(--text-1);
+        font-weight: 600;
+      }
+      .flow-arrow {
+        display: flex;
+        align-items: center;
+        padding: 0 4px;
+        margin-top: 20px;
+        color: var(--text-3);
+        font-size: 1.1rem;
+        flex-shrink: 0;
+      }
+      .flow-note {
+        margin-top: 16px;
+        padding: 14px 18px;
+        background: var(--amber-bg);
+        border: 1px solid var(--amber-border);
+        border-radius: var(--radius-sm);
+        font-size: 0.82rem;
+        color: #92400e;
+      }
+      .flow-note strong {
+        color: #78350f;
+      }
+
+      /* ============ Session Flow / Timeline ============ */
+      .timeline-wrap {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 32px;
+        box-shadow: var(--shadow-sm);
+      }
+      .timeline {
+        display: flex;
+        gap: 0;
+        align-items: stretch;
+        overflow-x: auto;
+        padding: 12px 0;
+      }
+      .timeline-phase {
+        flex: 1;
+        min-width: 220px;
+        padding: 20px;
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        background: var(--bg);
+        position: relative;
+      }
+      .timeline-phase.p1 {
+        border-top: 3px solid var(--blue);
+      }
+      .timeline-phase.p2 {
+        border-top: 3px solid var(--green);
+      }
+      .timeline-phase.p3 {
+        border-top: 3px solid var(--purple);
+      }
+
+      .timeline-phase-title {
+        font-size: 0.72rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 12px;
+      }
+      .timeline-phase.p1 .timeline-phase-title {
+        color: var(--blue);
+      }
+      .timeline-phase.p2 .timeline-phase-title {
+        color: var(--green);
+      }
+      .timeline-phase.p3 .timeline-phase-title {
+        color: var(--purple);
+      }
+
+      .timeline-steps {
+        list-style: none;
+        font-size: 0.8rem;
+        color: var(--text-2);
+      }
+      .timeline-steps li {
+        padding: 4px 0;
+        position: relative;
+        padding-left: 16px;
+      }
+      .timeline-steps li::before {
+        content: "";
+        position: absolute;
+        left: 0;
+        top: 11px;
+        width: 6px;
+        height: 6px;
+        border-radius: 50%;
+        background: var(--border);
+      }
+      .timeline-phase.p1 .timeline-steps li::before {
+        background: var(--blue);
+      }
+      .timeline-phase.p2 .timeline-steps li::before {
+        background: var(--green);
+      }
+      .timeline-phase.p3 .timeline-steps li::before {
+        background: var(--purple);
+      }
+
+      .timeline-connector {
+        display: flex;
+        align-items: center;
+        padding: 0 8px;
+        color: var(--text-3);
+        font-size: 1.2rem;
+        flex-shrink: 0;
+      }
+      .timeline-badge {
+        display: inline-block;
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.68rem;
+        font-weight: 600;
+        font-family: "SF Mono", "Fira Code", monospace;
+      }
+      .badge-preparing {
+        background: var(--amber-bg);
+        color: #92400e;
+      }
+      .badge-ready {
+        background: var(--blue-bg);
+        color: var(--blue);
+      }
+      .badge-progress {
+        background: var(--green-bg);
+        color: #065f46;
+      }
+      .badge-done {
+        background: #ecfdf5;
+        color: #065f46;
+      }
+      .badge-failed {
+        background: var(--red-bg);
+        color: var(--red);
+      }
+
+      /* State Machine */
+      .state-machine {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        flex-wrap: wrap;
+        margin-top: 24px;
+        padding: 16px 20px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        font-size: 0.78rem;
+      }
+      .state-node {
+        padding: 5px 12px;
+        border-radius: 6px;
+        font-weight: 600;
+        font-size: 0.72rem;
+        white-space: nowrap;
+      }
+      .state-arrow {
+        color: var(--text-3);
+        font-size: 0.9rem;
+      }
+
+      /* ============ Feature Cards ============ */
+      .feature-card {
+        padding: 28px;
+      }
+      .feature-card .feature-num {
+        font-size: 0.72rem;
+        font-weight: 700;
+        color: var(--text-3);
+        margin-bottom: 10px;
+      }
+      .feature-card h3 {
+        font-size: 1rem;
+        margin-bottom: 8px;
+      }
+      .feature-card p {
+        font-size: 0.85rem;
+        color: var(--text-2);
+      }
+      .feature-card .feature-highlight {
+        margin-top: 14px;
+        padding: 10px 14px;
+        background: var(--bg);
+        border-radius: var(--radius-sm);
+        font-size: 0.78rem;
+        color: var(--text-2);
+        border-left: 3px solid var(--border);
+      }
+      .feature-card:nth-child(1) .feature-highlight {
+        border-left-color: var(--purple);
+      }
+      .feature-card:nth-child(2) .feature-highlight {
+        border-left-color: var(--green);
+      }
+      .feature-card:nth-child(3) .feature-highlight {
+        border-left-color: var(--amber);
+      }
+
+      /* ============ API Cards ============ */
+      .api-group-title {
+        font-size: 0.85rem;
+        font-weight: 600;
+        color: var(--text-1);
+        margin-bottom: 12px;
+        margin-top: 24px;
+      }
+      .api-group-title:first-child {
+        margin-top: 0;
+      }
+      .api-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 12px;
+        margin-bottom: 8px;
+      }
+      .api-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius-sm);
+        padding: 16px 20px;
+        box-shadow: var(--shadow-sm);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .api-card:hover {
+        transform: translateY(-1px);
+        box-shadow: var(--shadow-md);
+      }
+      .api-endpoint {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 6px;
+      }
+      .method {
+        padding: 2px 8px;
+        border-radius: 4px;
+        font-size: 0.68rem;
+        font-weight: 700;
+        font-family: "SF Mono", "Fira Code", monospace;
+      }
+      .method.post {
+        background: var(--green-bg);
+        color: #065f46;
+      }
+      .method.get {
+        background: var(--blue-bg);
+        color: var(--blue);
+      }
+      .method.put {
+        background: var(--amber-bg);
+        color: #92400e;
+      }
+      .method.delete {
+        background: var(--red-bg);
+        color: var(--red);
+      }
+
+      .api-path {
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 0.8rem;
+        color: var(--text-1);
+        font-weight: 500;
+      }
+      .api-desc {
+        font-size: 0.78rem;
+        color: var(--text-3);
+      }
+
+      /* ============ DB Schema ============ */
+      .schema-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 16px;
+      }
+      .schema-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 20px;
+        box-shadow: var(--shadow-sm);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .schema-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      .schema-name {
+        font-family: "SF Mono", "Fira Code", monospace;
+        font-size: 0.88rem;
+        font-weight: 600;
+        color: var(--text-1);
+        margin-bottom: 10px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid var(--divider);
+      }
+      .schema-cols {
+        list-style: none;
+        font-size: 0.75rem;
+      }
+      .schema-cols li {
+        padding: 3px 0;
+        display: flex;
+        justify-content: space-between;
+        gap: 12px;
+      }
+      .col-name {
+        font-family: "SF Mono", "Fira Code", monospace;
+        color: var(--text-1);
+        font-weight: 500;
+      }
+      .col-type {
+        font-family: "SF Mono", "Fira Code", monospace;
+        color: var(--text-3);
+        font-size: 0.7rem;
+      }
+      .col-type.special {
+        color: var(--purple);
+        font-weight: 500;
+      }
+      .schema-fk {
+        margin-top: 8px;
+        padding-top: 8px;
+        border-top: 1px solid var(--divider);
+        font-size: 0.7rem;
+        color: var(--text-3);
+      }
+
+      /* ============ Tech Stack ============ */
+      .stack-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+        gap: 14px;
+      }
+      .stack-card {
+        background: var(--card);
+        border: 1px solid var(--border);
+        border-radius: var(--radius);
+        padding: 18px 20px;
+        box-shadow: var(--shadow-sm);
+        transition:
+          transform 0.2s,
+          box-shadow 0.2s;
+      }
+      .stack-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+      }
+      .stack-layer {
+        font-size: 0.68rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 1.5px;
+        margin-bottom: 10px;
+      }
+      .stack-card.frontend .stack-layer {
+        color: var(--blue);
+      }
+      .stack-card.backend .stack-layer {
+        color: var(--green);
+      }
+      .stack-card.ai .stack-layer {
+        color: var(--amber);
+      }
+      .stack-card.database .stack-layer {
+        color: var(--purple);
+      }
+      .stack-card.infra .stack-layer {
+        color: #6b7280;
+      }
+      .stack-card.llm .stack-layer {
+        color: var(--red);
+      }
+
+      .stack-techs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+      }
+      .tech-tag {
+        padding: 4px 10px;
+        background: var(--bg);
+        border: 1px solid var(--border);
+        border-radius: 6px;
+        font-size: 0.76rem;
+        color: var(--text-1);
+        font-weight: 500;
+      }
+
+      /* ============ Footer ============ */
+      .footer {
+        padding: 40px 0;
+        border-top: 1px solid var(--border);
+        text-align: center;
+      }
+      .footer p {
+        font-size: 0.8rem;
+        color: var(--text-3);
+      }
+
+      /* ============ Animations ============ */
+      .fade-in {
+        opacity: 0;
+        transform: translateY(20px);
+        transition:
+          opacity 0.6s ease,
+          transform 0.6s ease;
+      }
+      .fade-in.visible {
+        opacity: 1;
+        transform: translateY(0);
+      }
+
+      /* ============ Responsive ============ */
+      @media (max-width: 768px) {
+        .hero h1 {
+          font-size: 2rem;
+        }
+        .hero-sub {
+          font-size: 1rem;
+        }
+        .intro-grid {
+          grid-template-columns: 1fr;
+        }
+        .grid-2 {
+          grid-template-columns: 1fr;
+        }
+        .grid-3 {
+          grid-template-columns: 1fr;
+        }
+        .arch-row {
+          flex-direction: column;
+        }
+        .arch-arrow {
+          gap: 24px;
+        }
+        .phase-groups {
+          flex-direction: column;
+        }
+        .phase-agents {
+          flex-direction: column;
+          align-items: center;
+        }
+        .flow-arrow {
+          transform: rotate(90deg);
+          padding: 4px 0;
+        }
+        .timeline {
+          flex-direction: column;
+        }
+        .timeline-connector {
+          transform: rotate(90deg);
+          padding: 4px 0;
+        }
+        .nav-links {
+          gap: 0;
+        }
+        .nav-links a {
+          padding: 6px 8px;
+          font-size: 0.72rem;
+        }
+        .section {
+          padding: 48px 0;
+        }
+        .section-title {
+          font-size: 1.3rem;
+        }
+        .api-grid {
+          grid-template-columns: 1fr;
+        }
+        .schema-grid {
+          grid-template-columns: 1fr;
+        }
+        .stack-grid {
+          grid-template-columns: 1fr 1fr;
+        }
+        .state-machine {
+          justify-content: center;
+        }
+      }
+      @media (max-width: 480px) {
+        .hero h1 {
+          font-size: 1.6rem;
+        }
+        .container {
+          padding: 0 16px;
+        }
+        .hero-stats {
+          flex-direction: column;
+          align-items: center;
+        }
+        .stack-grid {
+          grid-template-columns: 1fr;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ============ NAVIGATION ============ -->
+    <nav class="nav" id="nav">
+      <div class="container nav-inner">
+        <a href="#hero" class="nav-logo">AI Interview Coach</a>
+        <ul class="nav-links">
+          <li><a href="#intro">소개</a></li>
+          <li><a href="#architecture">아키텍처</a></li>
+          <li><a href="#agents">에이전트</a></li>
+          <li><a href="#flow">흐름</a></li>
+          <li><a href="#features">기능</a></li>
+          <li><a href="#api">API</a></li>
+          <li><a href="#schema">DB</a></li>
+          <li><a href="#stack">스택</a></li>
+        </ul>
+      </div>
+    </nav>
+
+    <!-- ============ HERO ============ -->
+    <header class="hero container" id="hero">
+      <span class="hero-badge">Personal Project — 2026</span>
+      <h1>AI Interview Coach</h1>
+      <p class="hero-sub">
+        이력서와 채용공고를 업로드하면 5개의 AI 에이전트가 실제 기술 면접을
+        시뮬레이션하고, 답변을 평가하여 종합 리포트를 제공합니다.
+      </p>
+      <!-- <div class="hero-stats">
+      <div class="stat">
+        <span class="stat-num">5</span>
+        <span class="stat-label">AI Agents</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">7</span>
+        <span class="stat-label">DB Tables</span>
+      </div>
+      <div class="stat">
+        <span class="stat-num">18</span>
+        <span class="stat-label">REST APIs</span>
+      </div>
+    </div> -->
+    </header>
+
+    <!-- ============ INTRO ============ -->
+    <div class="section" id="intro">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--blue)">Overview</div>
+        <h2 class="section-title">프로젝트 소개</h2>
+        <p class="section-desc">
+          AI 기술 면접 코치는 두 가지 핵심 기능으로 구성됩니다.
+        </p>
+
+        <div class="intro-grid">
+          <div class="card intro-card">
+            <div class="card-icon blue">&#x1F3AF;</div>
+            <h3>모의면접 시스템</h3>
+            <p>
+              이력서(PDF)와 채용공고(JD)를 업로드하면 CrewAI 기반 5개 에이전트가
+              기술 면접을 진행합니다. 턴 기반 Q&A, 꼬리질문(최대 2회), 실시간
+              평가, 종합 리포트를 제공합니다.
+            </p>
+            <div class="intro-tags">
+              <span class="tag">CrewAI</span>
+              <span class="tag">턴 기반 면접</span>
+              <span class="tag">꼬리질문</span>
+              <span class="tag">종합 리포트</span>
+            </div>
+          </div>
+          <div class="card intro-card">
+            <div class="card-icon amber">&#x1F4DA;</div>
+            <h3>지식 기반 문제 생성</h3>
+            <p>
+              Obsidian MD 스터디 노트를 업로드하면 RAG 기반으로 면접형 문제를
+              자동 생성합니다. 오답 시 관련 노트와 누락 포인트를 연결하여 학습
+              효율을 높입니다.
+            </p>
+            <div class="intro-tags">
+              <span class="tag">RAG 문제 생성</span>
+              <span class="tag">오답 분석</span>
+              <span class="tag">노트 연결</span>
+              <span class="tag">pgvector</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ ARCHITECTURE ============ -->
+    <div class="section" id="architecture">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--green)">
+          Architecture
+        </div>
+        <h2 class="section-title">시스템 아키텍처</h2>
+        <p class="section-desc">4개 레이어로 구성된 마이크로서비스 아키텍처</p>
+
+        <div class="arch-stack">
+          <!-- Row 1: Client -->
+          <div class="arch-row">
+            <div class="arch-box frontend">
+              <div class="arch-label">Frontend</div>
+              <div class="arch-title">Next.js 15 (App Router)</div>
+              <div class="arch-tech">React 19 + TypeScript</div>
+              <div class="arch-items">
+                <span class="arch-item">면접 진행 UI (턴 기반)</span>
+                <span class="arch-item">이력서/JD 업로드</span>
+                <span class="arch-item">리포트 대시보드</span>
+                <span class="arch-item">문제 풀기 UI</span>
+              </div>
+            </div>
+            <div class="arch-box external">
+              <div class="arch-label">External Input</div>
+              <div class="arch-title">Obsidian Plugin</div>
+              <div class="arch-tech">study 태그 기반 MD 파일 전송</div>
+              <div class="arch-items">
+                <span class="arch-item">MD 파일 전송</span>
+                <span class="arch-item">태그 기반 필터링</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="arch-arrow">
+            <div class="arrow-unit">
+              <div class="arrow-tip">&#x25BC;</div>
+              <div class="arrow-line"></div>
+              <div class="arrow-text">REST API</div>
+            </div>
+            <div class="arrow-unit">
+              <div class="arrow-tip">&#x25BC;</div>
+              <div class="arrow-line"></div>
+              <div class="arrow-text">REST API</div>
+            </div>
+          </div>
+
+          <!-- Row 2: Backend -->
+          <div class="arch-row">
+            <div class="arch-box backend" style="flex: 1 1 100%">
+              <div class="arch-label">API Server</div>
+              <div class="arch-title">Spring Boot 3.x</div>
+              <div class="arch-tech">
+                Java 21 — API Gateway + 인증 + 세션/데이터 관리
+              </div>
+              <div class="arch-items">
+                <span class="arch-item">JWT 인증</span>
+                <span class="arch-item">파일 업로드/파싱</span>
+                <span class="arch-item">면접 세션 관리</span>
+                <span class="arch-item">리포트 CRUD</span>
+                <span class="arch-item">MD 파일 수신</span>
+                <span class="arch-item">JD 파싱</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="arch-arrow">
+            <div class="arrow-unit">
+              <div class="arrow-tip">&#x25BC;</div>
+              <div class="arrow-line"></div>
+              <div class="arrow-text">Internal REST (HTTP)</div>
+            </div>
+          </div>
+
+          <!-- Row 3: AI -->
+          <div class="arch-row">
+            <div class="arch-box ai" style="flex: 1 1 100%">
+              <div class="arch-label">AI Server</div>
+              <div class="arch-title">FastAPI + LangChain + CrewAI</div>
+              <div class="arch-tech">Python — 멀티에이전트 오케스트레이션</div>
+              <div class="arch-items">
+                <span class="arch-item">문서 임베딩 &amp; RAG</span>
+                <span class="arch-item">CrewAI 에이전트 관리</span>
+                <span class="arch-item">질문 생성</span>
+                <span class="arch-item">답변 평가</span>
+                <span class="arch-item">리포트 생성</span>
+                <span class="arch-item">MD 문제 생성</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Arrow -->
+          <div class="arch-arrow">
+            <div class="arrow-unit">
+              <div class="arrow-tip">&#x25BC;</div>
+              <div class="arrow-line"></div>
+              <div class="arrow-text">Read / Write</div>
+            </div>
+            <div class="arrow-unit">
+              <div class="arrow-tip">&#x25BC;</div>
+              <div class="arrow-line"></div>
+              <div class="arrow-text">LLM API Call</div>
+            </div>
+          </div>
+
+          <!-- Row 4: Data & External -->
+          <div class="arch-row">
+            <div class="arch-box data">
+              <div class="arch-label">Data Layer</div>
+              <div class="arch-title">PostgreSQL + pgvector</div>
+              <div class="arch-tech">통합 벡터 저장소 + 관계형 데이터</div>
+              <div class="arch-items">
+                <span class="arch-item">사용자/세션 데이터</span>
+                <span class="arch-item">이력서 임베딩</span>
+                <span class="arch-item">MD 지식 임베딩</span>
+                <span class="arch-item">면접 로그</span>
+                <span class="arch-item">문제/오답 이력</span>
+              </div>
+            </div>
+            <div class="arch-box external">
+              <div class="arch-label">External</div>
+              <div class="arch-title">LLM Provider</div>
+              <div class="arch-tech">Google ADK / OpenAI API</div>
+              <div class="arch-items">
+                <span class="arch-item">질문 생성</span>
+                <span class="arch-item">답변 평가</span>
+                <span class="arch-item">임베딩 모델</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ AGENT FLOW ============ -->
+    <div class="section" id="agents">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--amber)">Agent Flow</div>
+        <h2 class="section-title">CrewAI 에이전트 플로우</h2>
+        <p class="section-desc">
+          5개의 AI 에이전트가 3단계로 협업하여 면접을 진행합니다.
+        </p>
+
+        <div class="flow-wrap">
+          <div class="phase-groups">
+            <!-- Phase 1 -->
+            <div class="phase-group">
+              <span class="phase-label">Phase 1 — 면접 준비 (1회)</span>
+              <div class="phase-agents">
+                <div class="agent-node">
+                  <div class="agent-icon blue">&#x1F4CB;</div>
+                  <div class="agent-name">Analyst</div>
+                  <div class="agent-role">이력서/JD 분석가</div>
+                  <div class="agent-detail">
+                    <strong>입력:</strong> 이력서 + JD + MD지식<br />
+                    <strong>출력:</strong> 후보자 프로필 + 기술 매트릭스
+                  </div>
+                </div>
+                <div class="flow-arrow"><span>&#x2192;</span></div>
+                <div class="agent-node">
+                  <div class="agent-icon green">&#x1F3AF;</div>
+                  <div class="agent-name">Planner</div>
+                  <div class="agent-role">질문 설계자</div>
+                  <div class="agent-detail">
+                    <strong>입력:</strong> 후보자 프로필<br />
+                    <strong>출력:</strong> 질문 시나리오 (8~10문항, JSON)
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-arrow" style="margin-top: 50px">
+              <span>&#x2192;</span>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="phase-group">
+              <span class="phase-label">Phase 2 — 면접 진행 (매 턴)</span>
+              <div class="phase-agents">
+                <div class="agent-node">
+                  <div class="agent-icon amber">&#x1F399;&#xFE0F;</div>
+                  <div class="agent-name">Interviewer</div>
+                  <div class="agent-role">기술 면접관</div>
+                  <div class="agent-detail">
+                    <strong>입력:</strong> 시나리오 + 사용자 답변<br />
+                    <strong>출력:</strong> 다음 질문 or 꼬리질문
+                  </div>
+                </div>
+                <div class="flow-arrow"><span>&#x21C4;</span></div>
+                <div class="agent-node">
+                  <div class="agent-icon purple">&#x2696;&#xFE0F;</div>
+                  <div class="agent-name">Evaluator</div>
+                  <div class="agent-role">답변 평가자</div>
+                  <div class="agent-detail">
+                    <strong>입력:</strong> 답변 + MD지식 + 채점기준<br />
+                    <strong>출력:</strong> 점수(1~10) + 피드백
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="flow-arrow" style="margin-top: 50px">
+              <span>&#x2192;</span>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="phase-group">
+              <span class="phase-label">Phase 3 — 리포트 (1회)</span>
+              <div class="phase-agents">
+                <div class="agent-node">
+                  <div class="agent-icon red">&#x1F4CA;</div>
+                  <div class="agent-name">Coach</div>
+                  <div class="agent-role">종합 코치</div>
+                  <div class="agent-detail">
+                    <strong>입력:</strong> 전체 면접 로그 + 평가 데이터<br />
+                    <strong>출력:</strong> 종합 리포트 + 학습 추천
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flow-note">
+          Analyst &#x2192; Planner는 면접 시작 전 1회 실행 (@Async 백그라운드).
+          Interviewer &#x21C4; Evaluator는 매 턴마다 반복 실행. Coach는 면접
+          종료 후 1회 실행.
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ SESSION FLOW ============ -->
+    <div class="section" id="flow">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--purple)">
+          Session Flow
+        </div>
+        <h2 class="section-title">면접 세션 흐름</h2>
+        <p class="section-desc">3단계 파이프라인으로 면접이 진행됩니다.</p>
+
+        <div class="timeline-wrap">
+          <div class="timeline">
+            <!-- Phase 1 -->
+            <div class="timeline-phase p1">
+              <div class="timeline-phase-title">Phase 1 — 면접 준비</div>
+              <ul class="timeline-steps">
+                <li>이력서(PDF) + JD 업로드</li>
+                <li><code>POST /api/interview/create</code></li>
+                <li>@Async 백그라운드 준비 시작</li>
+                <li>Analyst (병렬 3태스크) &#x2192; Planner</li>
+                <li>질문 시나리오 JSON 생성</li>
+                <li>프론트: 5초 간격 폴링으로 상태 확인</li>
+              </ul>
+            </div>
+
+            <div class="timeline-connector">&#x2192;</div>
+
+            <!-- Phase 2 -->
+            <div class="timeline-phase p2">
+              <div class="timeline-phase-title">Phase 2 — 면접 진행 (N회)</div>
+              <ul class="timeline-steps">
+                <li>사용자 "입장하기" 클릭</li>
+                <li>메인 질문 8~10개 순차 진행</li>
+                <li><code>POST /api/interview/{id}/answer</code></li>
+                <li>Evaluator &#x2192; 채점 (1~10점)</li>
+                <li>Interviewer &#x2192; 꼬리질문 or 다음 질문</li>
+                <li>메인 질문당 꼬리질문 최대 2회</li>
+              </ul>
+            </div>
+
+            <div class="timeline-connector">&#x2192;</div>
+
+            <!-- Phase 3 -->
+            <div class="timeline-phase p3">
+              <div class="timeline-phase-title">Phase 3 — 리포트 생성</div>
+              <ul class="timeline-steps">
+                <li><code>POST /api/interview/{id}/end</code></li>
+                <li>Coach 에이전트 실행</li>
+                <li>종합 점수 + 등급 (A/B/C/D/F)</li>
+                <li>강점/보완점 정리</li>
+                <li>지식 갭 분석 (학습O/X 분류)</li>
+                <li>학습 추천 + 다음 단계 제시</li>
+              </ul>
+            </div>
+          </div>
+
+          <!-- State Machine -->
+          <div class="state-machine">
+            <span
+              style="
+                font-size: 0.72rem;
+                font-weight: 600;
+                color: var(--text-3);
+                margin-right: 4px;
+              "
+              >상태:</span
+            >
+            <span class="state-node badge-preparing">PREPARING</span>
+            <span class="state-arrow">&#x2192;</span>
+            <span class="state-node badge-ready">READY</span>
+            <span class="state-arrow">&#x2192;</span>
+            <span class="state-node badge-progress">IN_PROGRESS</span>
+            <span class="state-arrow">&#x2192;</span>
+            <span class="state-node badge-done">COMPLETED</span>
+            <span
+              style="color: var(--text-3); font-size: 0.75rem; margin-left: 8px"
+              >|</span
+            >
+            <span class="state-node badge-preparing">PREPARING</span>
+            <span class="state-arrow">&#x2192;</span>
+            <span class="state-node badge-failed">FAILED</span>
+            <span class="state-arrow">&#x2192;</span>
+            <span style="font-size: 0.7rem; color: var(--text-3)">재시도</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ KEY FEATURES ============ -->
+    <div class="section" id="features">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--purple)">Features</div>
+        <h2 class="section-title">핵심 기능 상세</h2>
+        <p class="section-desc">프로젝트의 기술적 차별점을 소개합니다.</p>
+
+        <div class="grid-3">
+          <div class="card feature-card">
+            <div class="feature-num">01</div>
+            <h3>RAG 기반 문맥 질문 생성</h3>
+            <p>
+              pgvector의 similarity_search로 사용자의 이력서, JD, MD 스터디
+              노트를 교차 검색하여 개인화된 면접 질문을 생성합니다.
+            </p>
+            <div class="feature-highlight">
+              <strong>기술:</strong> pgvector + OpenAI Embedding + LangChain RAG
+              Pipeline
+            </div>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-num">02</div>
+            <h3>비동기 면접 준비</h3>
+            <p>
+              AI 질문 시나리오 생성(10~30초)을 @Async 백그라운드로 처리하고,
+              프론트엔드에서 5초 간격 폴링으로 상태를 확인합니다.
+            </p>
+            <div class="feature-highlight">
+              <strong>패턴:</strong> @Async + Frontend Polling + Status State
+              Machine
+            </div>
+          </div>
+          <div class="card feature-card">
+            <div class="feature-num">03</div>
+            <h3>지식 갭 분석</h3>
+            <p>
+              사용자의 MD 노트와 면접 답변을 대조하여 "학습O+답변O",
+              "학습O+답변X", "미학습" 3단계로 지식 갭을 분류합니다.
+            </p>
+            <div class="feature-highlight">
+              <strong>분류:</strong> studied_and_strong / studied_but_weak /
+              not_studied
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ API DESIGN ============ -->
+    <div class="section" id="api">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--green)">API Design</div>
+        <h2 class="section-title">API 설계</h2>
+        <p class="section-desc">Spring Boot와 FastAPI 간 REST API 구성</p>
+
+        <!-- Auth -->
+        <div class="api-group-title">Authentication</div>
+        <div class="api-grid">
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/auth/signup</span>
+            </div>
+            <div class="api-desc">회원가입 (이메일/비밀번호)</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/auth/login</span>
+            </div>
+            <div class="api-desc">로그인 &#x2192; JWT Access Token 발급</div>
+          </div>
+        </div>
+
+        <!-- Interview -->
+        <div class="api-group-title">Interview (모의면접)</div>
+        <div class="api-grid">
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/interview/create</span>
+            </div>
+            <div class="api-desc">
+              면접 생성 (Multipart: PDF + JD) &#x2192; 즉시 응답 + @Async 준비
+            </div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method get">GET</span>
+              <span class="api-path">/api/interview</span>
+            </div>
+            <div class="api-desc">면접 세션 목록 (폴링용, status 포함)</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/interview/{id}/enter</span>
+            </div>
+            <div class="api-desc">면접 입장 (READY &#x2192; IN_PROGRESS)</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/interview/{id}/answer</span>
+            </div>
+            <div class="api-desc">답변 제출 &#x2192; 평가 + 다음 질문 반환</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/interview/{id}/end</span>
+            </div>
+            <div class="api-desc">면접 종료 &#x2192; Coach 리포트 생성</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method get">GET</span>
+              <span class="api-path">/api/interview/{id}/report</span>
+            </div>
+            <div class="api-desc">면접 리포트 조회</div>
+          </div>
+        </div>
+
+        <!-- Knowledge -->
+        <div class="api-group-title">Knowledge (지식 관리)</div>
+        <div class="api-grid">
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/knowledge/upload</span>
+            </div>
+            <div class="api-desc">MD 파일 수신 &#x2192; 태그 파싱 + 임베딩</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method get">GET</span>
+              <span class="api-path">/api/knowledge</span>
+            </div>
+            <div class="api-desc">업로드된 지식 노트 목록 조회</div>
+          </div>
+        </div>
+
+        <!-- Quiz -->
+        <div class="api-group-title">Quiz (문제 생성)</div>
+        <div class="api-grid">
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/quiz/generate</span>
+            </div>
+            <div class="api-desc">태그/난이도 기반 면접형 문제 생성</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/api/quiz/{id}/submit</span>
+            </div>
+            <div class="api-desc">
+              답변 제출 &#x2192; 채점 + 누락 포인트 + 관련 노트
+            </div>
+          </div>
+        </div>
+
+        <!-- Internal -->
+        <div class="api-group-title">
+          Internal API (Spring Boot &#x2194; FastAPI)
+        </div>
+        <div class="api-grid">
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/ai/interview/prepare</span>
+            </div>
+            <div class="api-desc">
+              이력서+JD+RAG &#x2192; 질문 시나리오 생성 (Phase 1)
+            </div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/ai/interview/evaluate</span>
+            </div>
+            <div class="api-desc">답변 평가 + 다음 질문 결정 (Phase 2)</div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/ai/interview/report</span>
+            </div>
+            <div class="api-desc">
+              전체 로그 &#x2192; 종합 리포트 생성 (Phase 3)
+            </div>
+          </div>
+          <div class="api-card">
+            <div class="api-endpoint">
+              <span class="method post">POST</span>
+              <span class="api-path">/ai/knowledge/embed</span>
+            </div>
+            <div class="api-desc">MD 텍스트 &#x2192; 벡터 임베딩 저장</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ DB SCHEMA ============ -->
+    <div class="section" id="schema">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--purple)">Database</div>
+        <h2 class="section-title">데이터베이스 스키마</h2>
+        <p class="section-desc">PostgreSQL 16 + pgvector — 7개 테이블</p>
+
+        <div class="schema-grid">
+          <div class="schema-card">
+            <div class="schema-name">users</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">email</span
+                ><span class="col-type">VARCHAR</span>
+              </li>
+              <li>
+                <span class="col-name">password</span
+                ><span class="col-type">VARCHAR</span>
+              </li>
+              <li>
+                <span class="col-name">name</span
+                ><span class="col-type">VARCHAR</span>
+              </li>
+              <li>
+                <span class="col-name">created_at</span
+                ><span class="col-type">TIMESTAMP</span>
+              </li>
+            </ul>
+          </div>
+
+          <div class="schema-card">
+            <div class="schema-name">resumes</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">user_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">file_path</span
+                ><span class="col-type">VARCHAR</span>
+              </li>
+              <li>
+                <span class="col-name">parsed_text</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">created_at</span
+                ><span class="col-type">TIMESTAMP</span>
+              </li>
+            </ul>
+            <div class="schema-fk">FK: user_id &#x2192; users.id</div>
+          </div>
+
+          <div class="schema-card">
+            <div class="schema-name">knowledge_notes</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">user_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">file_name</span
+                ><span class="col-type">VARCHAR</span>
+              </li>
+              <li>
+                <span class="col-name">content</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">tags</span
+                ><span class="col-type special">TEXT[]</span>
+              </li>
+              <li>
+                <span class="col-name">embedding</span
+                ><span class="col-type special">VECTOR(1536)</span>
+              </li>
+            </ul>
+            <div class="schema-fk">FK: user_id &#x2192; users.id</div>
+          </div>
+
+          <div class="schema-card">
+            <div class="schema-name">interview_sessions</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">user_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">resume_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">jd_text</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">difficulty</span
+                ><span class="col-type">VARCHAR</span>
+              </li>
+              <li>
+                <span class="col-name">status</span
+                ><span class="col-type special">ENUM</span>
+              </li>
+              <li>
+                <span class="col-name">question_scenario</span
+                ><span class="col-type special">JSONB</span>
+              </li>
+            </ul>
+            <div class="schema-fk">
+              FK: user_id &#x2192; users.id, resume_id &#x2192; resumes.id
+            </div>
+          </div>
+
+          <div class="schema-card">
+            <div class="schema-name">interview_turns</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">session_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">turn_number</span
+                ><span class="col-type">INT</span>
+              </li>
+              <li>
+                <span class="col-name">question_text</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">question_type</span
+                ><span class="col-type special">ENUM</span>
+              </li>
+              <li>
+                <span class="col-name">user_answer</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">score</span
+                ><span class="col-type">INT</span>
+              </li>
+              <li>
+                <span class="col-name">feedback</span
+                ><span class="col-type">TEXT</span>
+              </li>
+            </ul>
+            <div class="schema-fk">
+              FK: session_id &#x2192; interview_sessions.id
+            </div>
+          </div>
+
+          <div class="schema-card">
+            <div class="schema-name">interview_reports</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">session_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">overall_score</span
+                ><span class="col-type">INT</span>
+              </li>
+              <li>
+                <span class="col-name">strengths</span
+                ><span class="col-type special">JSONB</span>
+              </li>
+              <li>
+                <span class="col-name">improvements</span
+                ><span class="col-type special">JSONB</span>
+              </li>
+              <li>
+                <span class="col-name">study_recommendations</span
+                ><span class="col-type special">JSONB</span>
+              </li>
+            </ul>
+            <div class="schema-fk">
+              FK: session_id &#x2192; interview_sessions.id (1:1)
+            </div>
+          </div>
+
+          <div class="schema-card">
+            <div class="schema-name">quiz_attempts</div>
+            <ul class="schema-cols">
+              <li>
+                <span class="col-name">id</span
+                ><span class="col-type">UUID PK</span>
+              </li>
+              <li>
+                <span class="col-name">user_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">knowledge_note_id</span
+                ><span class="col-type">UUID FK</span>
+              </li>
+              <li>
+                <span class="col-name">question_text</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">user_answer</span
+                ><span class="col-type">TEXT</span>
+              </li>
+              <li>
+                <span class="col-name">is_correct</span
+                ><span class="col-type">BOOLEAN</span>
+              </li>
+              <li>
+                <span class="col-name">score</span
+                ><span class="col-type">INT</span>
+              </li>
+              <li>
+                <span class="col-name">missing_points</span
+                ><span class="col-type special">JSONB</span>
+              </li>
+            </ul>
+            <div class="schema-fk">
+              FK: user_id &#x2192; users.id, knowledge_note_id &#x2192;
+              knowledge_notes.id
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ TECH STACK ============ -->
+    <div class="section" id="stack">
+      <div class="container fade-in">
+        <div class="section-label" style="color: var(--red)">Tech Stack</div>
+        <h2 class="section-title">기술 스택</h2>
+        <p class="section-desc">프론트엔드부터 인프라까지 전체 기술 구성</p>
+
+        <div class="stack-grid">
+          <div class="stack-card frontend">
+            <div class="stack-layer">Frontend</div>
+            <div class="stack-techs">
+              <span class="tech-tag">Next.js 15</span>
+              <span class="tech-tag">React 19</span>
+              <span class="tech-tag">TypeScript</span>
+              <span class="tech-tag">Tailwind CSS</span>
+            </div>
+          </div>
+          <div class="stack-card backend">
+            <div class="stack-layer">API Server</div>
+            <div class="stack-techs">
+              <span class="tech-tag">Spring Boot 3.x</span>
+              <span class="tech-tag">Java 21</span>
+              <span class="tech-tag">Spring Security</span>
+              <span class="tech-tag">JPA</span>
+              <span class="tech-tag">JWT</span>
+              <span class="tech-tag">Flyway</span>
+            </div>
+          </div>
+          <div class="stack-card ai">
+            <div class="stack-layer">AI Server</div>
+            <div class="stack-techs">
+              <span class="tech-tag">FastAPI</span>
+              <span class="tech-tag">CrewAI</span>
+              <span class="tech-tag">LangChain</span>
+              <span class="tech-tag">Google ADK</span>
+              <span class="tech-tag">Python</span>
+            </div>
+          </div>
+          <div class="stack-card database">
+            <div class="stack-layer">Database</div>
+            <div class="stack-techs">
+              <span class="tech-tag">PostgreSQL 16</span>
+              <span class="tech-tag">pgvector</span>
+            </div>
+          </div>
+          <div class="stack-card infra">
+            <div class="stack-layer">Infrastructure</div>
+            <div class="stack-techs">
+              <span class="tech-tag">Docker Compose</span>
+              <span class="tech-tag">Gradle</span>
+            </div>
+          </div>
+          <div class="stack-card llm">
+            <div class="stack-layer">LLM Provider</div>
+            <div class="stack-techs">
+              <span class="tech-tag">Google Gemini</span>
+              <span class="tech-tag">OpenAI Embedding</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ============ FOOTER ============ -->
+    <footer class="footer">
+      <div class="container">
+        <p>
+          <strong style="color: var(--text-1)">AI Interview Coach</strong> —
+          Personal Project MVP
+        </p>
+        <p style="margin-top: 4px">
+          Spring Boot + FastAPI + CrewAI + Next.js + PostgreSQL
+        </p>
+      </div>
+    </footer>
+
+    <!-- ============ JAVASCRIPT ============ -->
+    <script>
+      // Navigation scroll shadow
+      const nav = document.getElementById("nav");
+      window.addEventListener("scroll", () => {
+        nav.classList.toggle("scrolled", window.scrollY > 10);
+      });
+
+      // Intersection Observer for fade-in animations
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              entry.target.classList.add("visible");
+            }
+          });
+        },
+        { threshold: 0.1 },
+      );
+
+      document
+        .querySelectorAll(".fade-in")
+        .forEach((el) => observer.observe(el));
+
+      // Active nav link highlighting
+      const sections = document.querySelectorAll(".section[id], .hero[id]");
+      const navLinks = document.querySelectorAll(".nav-links a");
+
+      const navObserver = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const id = entry.target.id;
+              navLinks.forEach((link) => {
+                link.classList.toggle(
+                  "active",
+                  link.getAttribute("href") === "#" + id,
+                );
+              });
+            }
+          });
+        },
+        { rootMargin: "-50% 0px -50% 0px" },
+      );
+
+      sections.forEach((section) => navObserver.observe(section));
+    </script>
+  </body>
+</html>
