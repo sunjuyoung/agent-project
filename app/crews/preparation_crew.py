@@ -2,8 +2,9 @@ from crewai import Task, Crew, Process
 
 from app.agents.analyst import create_analyst
 from app.agents.planner import create_planner
-from app.schemas.interview import InterviewScenarioSchema
 from app.tools.rag_search import RAGSearchTool
+from app.schemas.interview import InterviewScenarioSchema
+
 
 
 def create_preparation_crew(user_id: str) -> Crew:
@@ -243,6 +244,7 @@ def create_preparation_crew(user_id: str) -> Crew:
     )
 
     # ── Task E: 면접 질문 시나리오 설계 ─────────────────────────
+    # ★ 변경: follow_ups(완성된 꼬리질문) → follow_up_guide(탐색 방향만)
     task_e = Task(
         description=(
             "후보자 프로필(Task D)을 기반으로 실전 면접 질문 시나리오를 설계합니다.\n\n"
@@ -266,13 +268,19 @@ def create_preparation_crew(user_id: str) -> Crew:
             "     • 난이도 (EASY/MEDIUM/HARD)\n"
             "     • 질문 텍스트 (구체적이고 명확한 한국어 질문)\n"
             "     • 평가 기준 (이 질문으로 무엇을 평가하며, 좋은 답변의 조건)\n"
-            "     • 사전 꼬리질문은 질문별 최대 1개 (메인 질문에 대한 후속 질문)\n\n"
-            "     • 사전 꼬리질문은 필수 아님\n\n"
-            "4. **질문 품질 기준**:\n"
+            "     • 꼬리질문 가이드 (follow_up_guide)\n\n"
+            "4. **꼬리질문 가이드 설계 규칙 (중요)**:\n"
+            "   - 완성된 꼬리질문 텍스트를 작성하지 않습니다.\n"
+            "   - 대신 '탐색 방향(probe_direction)'과 '목적(purpose)'만 설계합니다.\n"
+            "   - 탐색 방향은 메인 질문의 평가 영역 내에서 깊이를 확인할 키워드/개념입니다.\n"
+            "   - 실제 꼬리질문은 Phase 2 면접 진행 시 후보자의 실제 답변을 보고 동적으로 생성됩니다.\n"
+            "   - 예시:\n"
+            "     • probe_direction: '캐시 무효화 전략, TTL 설정 기준, 캐시 스탬피드 대응'\n"
+            "     • purpose: '캐싱의 실무 적용 깊이와 장애 대응 경험 확인'\n\n"
+            "5. **질문 품질 기준**:\n"
             "   - 이력서 프로젝트 경험을 직접 언급하는 질문을 2~3개 포함합니다.\n"
             "   - '~에 대해 설명해주세요'와 같은 단순 지식 질문보다 "
             "'~상황에서 어떻게 해결하셨나요?'와 같은 경험 기반 질문을 선호합니다.\n"
-            "   - 꼬리질문은 메인 질문의 답변을 심화 또는 연결하는 방향이어야 합니다.\n"
             "   - 각 질문은 서로 중복되지 않는 독립적인 평가 영역을 다뤄야 합니다.\n\n"
             "**주의사항:**\n"
             "- Task D의 후보자 프로필 데이터를 반드시 참조하여 질문을 설계하세요.\n"
@@ -285,7 +293,7 @@ def create_preparation_crew(user_id: str) -> Crew:
 {
     "scenario": {
         "total_questions": "총 질문 수",
-        "difficulty_base": "기준 난이도",
+        "difficulty_base": "EASY", "MEDIUM", "HARD",
         "distribution": {
             "strength": "강점 질문 수",
             "weakness": "약점 질문 수",
@@ -293,27 +301,31 @@ def create_preparation_crew(user_id: str) -> Crew:
         },
         "questions": [
             {
-                "id": "q1",
-                "category": "strength/weakness/behavioral",
+                "category": "strength", "weakness", "behavioral",
                 "skill_target": "평가 대상 기술/역량",
-                "difficulty": "EASY/MEDIUM/HARD",
+                "difficulty": "EASY", "MEDIUM", "HARD",
                 "text": "면접 질문 텍스트 (한국어)",
                 "evaluation_criteria": [
-                    "평가 기준 1: 좋은 답변의 구체적 조건",
-                    "평가 기준 2: 확인해야 할 핵심 포인트"
-                ],
-                "follow_ups": [
                     {
-                        "text": "꼬리질문 텍스트 (한국어)",
-                        "purpose": "이 꼬리질문의 평가 목적"
+                        "point": "SAGA 패턴의 보상 트랜잭션 개념을 정확히 이해하고 있는가",
+                        "weight": "HIGH"
+                    },
+                    {
+                        "point": "실제 구현 경험 기반으로 구체적으로 설명하는가",
+                        "weight": "MEDIUM"
                     }
-                ]
+                ],
+                "follow_up_guide": {
+                    "probe_direction": "탐색할 키워드/개념 (쉼표 구분)",
+                    "purpose": "이 방향으로 꼬리질문하는 목적"
+                }
             }
         ]
     }
 }
 """,
         agent=planner,
+        output_json=InterviewScenarioSchema, 
         context=[task_d]
     )
 
@@ -322,4 +334,4 @@ def create_preparation_crew(user_id: str) -> Crew:
         tasks=[task_a, task_b, task_c, task_d, task_e],
         process=Process.sequential,
         verbose=True,
-    )
+    ), task_e

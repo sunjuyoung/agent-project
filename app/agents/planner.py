@@ -1,5 +1,6 @@
 from crewai import Agent
 
+
 def create_planner() -> Agent:
     return Agent(
         role="면접 시나리오 설계자 (Interview Scenario Architect)",
@@ -34,17 +35,23 @@ def create_planner() -> Agent:
             "  • 좋은 예: '프로젝트에서 DB 성능 이슈를 어떻게 해결하셨나요?'\n"
             "  • 나쁜 예: 'DB 인덱스에 대해 설명해주세요.'\n"
             "- 이력서 프로젝트를 직접 언급하는 질문을 2-3개 반드시 포함합니다.\n"
-            "- 각 질문은 서로 다른 독립적인 평가 영역을 다룹니다. 중복 금지.\n"
-            "- 꼬리질문(follow_ups)은 질문당 최대 1개이며, 필수가 아닙니다.\n"
-            "  꼬리질문은 메인 질문의 답변을 심화하거나 구체화하는 방향이어야 합니다.\n\n"
+            "- 각 질문은 서로 다른 독립적인 평가 영역을 다룹니다. 중복 금지.\n\n"
 
-            "### 4. 평가 기준(evaluation_criteria) 작성 규칙\n"
+            "### 4. 꼬리질문 가이드 (follow_up_guide) 규칙 — 중요!\n"
+            "- 꼬리질문의 완성된 텍스트를 미리 작성하지 않습니다.\n"
+            "- 대신 '탐색 방향(probe_direction)'과 '목적(purpose)'만 설계합니다.\n"
+            "- 실제 꼬리질문은 Phase 2에서 후보자의 답변을 보고 동적으로 생성됩니다.\n"
+            "- probe_direction은 해당 질문의 평가 영역을 벗어나지 않아야 합니다.\n"
+            "  • 좋은 예: probe_direction: '캐시 무효화 전략, TTL 설정 기준'\n"
+            "  • 나쁜 예: probe_direction: '캐시 무효화는 어떻게 처리하셨나요?' (완성된 질문)\n\n"
+
+            "### 5. 평가 기준(evaluation_criteria) 작성 규칙\n"
             "- 면접관이 즉시 채점에 활용할 수 있도록 구체적으로 작성합니다.\n"
             "- 각 기준은 '좋은 답변의 조건' 또는 '확인해야 할 핵심 포인트' 형태입니다.\n"
             "- 모호한 기준 금지: '기술 이해도가 높은지 확인' → "
             "'Spring IoC 컨테이너의 빈 생명주기를 구체적으로 설명할 수 있는지'\n\n"
 
-            "### 5. 입력 데이터 활용\n"
+            "### 6. 입력 데이터 활용\n"
             "- 반드시 이전 Task의 후보자 프로필(skill_matrix, interview_strategy)을 참조합니다.\n"
             "- skill_matrix의 question_depth가 '심화'인 기술은 강점 질문의 타겟으로 사용합니다.\n"
             "- question_depth가 '기본'인 기술은 약점 질문의 타겟으로 사용합니다.\n"
@@ -55,5 +62,5 @@ def create_planner() -> Agent:
         ),
         llm="gpt-4o-mini",
         allow_delegation=False,
-        verbose=True,
+        verbose=False,
     )

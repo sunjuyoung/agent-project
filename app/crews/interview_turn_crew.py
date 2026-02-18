@@ -93,6 +93,8 @@ def create_interview_turn_crew(
     )
 
     # ── 면접 진행 Task ───────────────────────────────────────
+    # ── 면접 진행 Task ───────────────────────────────────────
+    # ★ 변경: 사전 꼬리질문 텍스트 참조 → follow_up_guide 기반 동적 생성
     interview_task = Task(
         description=(
             "평가 결과를 기반으로 면접의 다음 액션을 결정하고, "
@@ -107,8 +109,7 @@ def create_interview_turn_crew(
             "   다음 3가지 중 하나를 선택합니다:\n\n"
             "   • FOLLOW_UP (꼬리질문 진행):\n"
             "     - 조건: 꼬리질문 횟수가 1회 미만이고, 답변을 더 깊이 확인할 필요가 있는 경우\n"
-            "     - 답변이 모호하거나 핵심을 빗나간 경우 추가 질문으로 기회를 줍니다\n"
-            "     - 시나리오에 사전 정의된 follow_ups를 참고하되, 실제 답변에 맞게 조정합니다\n\n"
+            "     - 답변이 모호하거나 핵심을 빗나간 경우 추가 질문으로 기회를 줍니다\n\n"
             "   • NEXT_QUESTION (다음 메인 질문으로 이동):\n"
             "     - 조건: 꼬리질문을 이미 1회 진행했거나, 답변이 충분히 평가 가능한 경우\n"
             "     - 남은 질문이 있는 경우에만 선택 가능\n"
@@ -122,16 +123,27 @@ def create_interview_turn_crew(
             "   - 기계적인 진행 멘트 금지: '다음 질문입니다', '잘 답변하셨습니다' 등 지양\n"
             "   - '모르겠습니다' 답변 → '괜찮습니다. 다른 질문으로 넘어가겠습니다' 등 존중하는 톤\n"
             "   - 평가 점수, 평가 기준, 채점 결과를 절대 노출하지 않습니다.\n\n"
-            "3. **다음 질문 설정 (next_question)**:\n"
-            "   - FOLLOW_UP: 꼬리질문의 text, skill_target, difficulty를 설정합니다.\n"
-            "     시나리오의 follow_ups를 참고하되, 실제 답변 맥락에 맞게 질문을 조정합니다.\n"
-            "   - NEXT_QUESTION: 시나리오 questions 리스트에서 다음 질문을 그대로 사용합니다.\n"
-            "   - END: next_question은 null로 설정합니다.\n\n"
+            "3. **다음 질문 설정 (nextQuestion)**:\n\n"
+            "   - **FOLLOW_UP일 때 — 꼬리질문 동적 생성 (★ 핵심):**\n"
+            "     시나리오에는 완성된 꼬리질문 텍스트가 없습니다.\n"
+            "     follow_up_guide의 probe_direction(탐색 방향)과 purpose(목적)만 제공됩니다.\n"
+            "     다음 과정으로 꼬리질문을 직접 생성하세요:\n"
+            "     (1) 후보자의 실제 답변에서 언급한 키워드/기술/경험을 파악\n"
+            "     (2) probe_direction에서 답변과 관련된 방향을 선택\n"
+            "     (3) 후보자가 언급한 맥락 + 탐색 방향을 결합하여 자연스러운 질문 생성\n"
+            "     예시:\n"
+            "       probe_direction: '캐시 무효화 전략, TTL 설정 기준'\n"
+            "       후보자 답변: 'Ehcache로 로컬 캐시를 구현했습니다'\n"
+            "       → 생성: 'Ehcache에서 캐시 무효화는 어떤 방식으로 처리하셨나요?'\n\n"
+            "   - **NEXT_QUESTION일 때:**\n"
+            "     시나리오 questions 리스트에서 다음 질문을 그대로 사용합니다.\n\n"
+            "   - **END일 때:**\n"
+            "     nextQuestion은 null로 설정합니다.\n\n"
             "**주의사항:**\n"
             "- 평가 결과(점수, hits, misses)는 내부 참고용이며, 면접관 멘트에 노출하지 않습니다.\n"
             "- 이전 대화 기록의 톤과 흐름을 유지합니다.\n"
             "- 질문 순서는 시나리오에 정의된 순서를 따릅니다. 임의로 순서를 변경하지 않습니다.\n"
-            "- 꼬리질문은 메인 질문의 평가 영역을 벗어나지 않습니다."
+            "- 꼬리질문은 메인 질문의 평가 영역(follow_up_guide.purpose)을 벗어나지 않습니다."
         ),
         expected_output="""
 다음 형식의 JSON:
@@ -140,11 +152,11 @@ def create_interview_turn_crew(
     "message": "면접관의 자연스러운 멘트 (한국어, 후보자 답변 참조)",
     "nextQuestion": {
         "id": "질문 ID (예: q1-f1 또는 q2)",
-        "text": "다음 질문 텍스트 (한국어)",
+        "text": "다음 질문 텍스트 (한국어) — FOLLOW_UP일 때는 답변 맥락 기반으로 직접 생성",
         "skillTarget": "평가 대상 기술",
         "difficulty": "EASY/MEDIUM/HARD",
         "evaluationCriteria": ["평가 기준"],
-        "followUps": []
+        "followUpGuide": null
     }
 }
 // decision이 END인 경우 nextQuestion은 null

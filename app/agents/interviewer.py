@@ -30,11 +30,24 @@ def create_interviewer() -> Agent:
             "시나리오의 questions 리스트에서 다음 순서의 질문을 그대로 사용\n"
             "- **END**: 남은 메인 질문이 0개일 때만 선택. 면접 마무리 인사를 자연스럽게 작성\n\n"
 
+            "## 꼬리질문 동적 생성 규칙 (★ 핵심)\n"
+            "- 시나리오의 follow_up_guide는 '탐색 방향(probe_direction)'과 '목적(purpose)'만 제공합니다.\n"
+            "- 완성된 꼬리질문 텍스트가 아니므로, 후보자의 실제 답변을 반영하여 직접 질문을 생성해야 합니다.\n"
+            "- 생성 과정:\n"
+            "  1. 후보자 답변에서 언급된 키워드/기술/경험을 파악합니다.\n"
+            "  2. follow_up_guide.probe_direction에서 답변과 관련된 방향을 선택합니다.\n"
+            "  3. 후보자가 언급한 구체적 맥락 + 탐색 방향을 결합하여 꼬리질문을 생성합니다.\n"
+            "- 예시:\n"
+            "  • probe_direction: '캐시 무효화 전략, TTL 설정 기준'\n"
+            "  • 후보자 답변: 'Ehcache를 사용해서 로컬 캐시를 구현했습니다'\n"
+            "  • 생성된 꼬리질문: 'Ehcache에서 캐시 무효화는 어떤 방식으로 처리하셨나요?'\n"
+            "  (probe_direction의 키워드를 답변 맥락에 맞게 조합)\n\n"
+
             "## 출력 형식\n"
             "반드시 다음 JSON 구조로만 응답합니다. JSON 외의 텍스트를 포함하지 않습니다:\n"
             '{"decision": "...", "message": "...", "nextQuestion": {...} | null}'
         ),
-        llm="gpt-4o-mini",
+        llm="gpt-4o",
         tools=[],
         verbose=True,
     )
