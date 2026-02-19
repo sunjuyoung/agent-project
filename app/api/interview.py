@@ -1,7 +1,8 @@
 import json
-
+import re
 from fastapi import APIRouter, HTTPException
-
+from pydantic import ValidationError
+from fastapi.responses import JSONResponse
 from app.schemas.interview import (
     PrepareRequest,
     EvaluateRequest,
@@ -25,7 +26,7 @@ from app.utils.crew_utils import (
 router = APIRouter(prefix="/ai/interview", tags=["interview"])
 
 
-@router.post("/prepare")
+@router.post("/prepare", response_model=InterviewScenarioSchema, response_class=JSONResponse)
 async def prepare_interview(request: PrepareRequest) -> InterviewScenarioSchema:
     """Phase 1: 이력서 + JD + RAG → 질문 시나리오 생성."""
     try:
@@ -41,12 +42,34 @@ async def prepare_interview(request: PrepareRequest) -> InterviewScenarioSchema:
         )
         
         # task_e는 crew.kickoff() 실행 후 output이 채워짐
-        scenario_schema: InterviewScenarioSchema = task_e.output.pydantic
+        scenario_schema = parse_scenario_output(task_e)
 
         return scenario_schema
     
+    except json.JSONDecodeError as e:
+        raise HTTPException(status_code=500, detail=f"LLM 응답 JSON 파싱 실패: {str(e)}")
+    except ValidationError as e:
+        raise HTTPException(status_code=500, detail=f"스키마 검증 실패: {str(e)}")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"면접 준비 실패: {str(e)}")
+
+def parse_scenario_output(task_e) -> InterviewScenarioSchema:
+    # 1순위
+    if task_e.output.pydantic:
+        return task_e.output.pydantic
+
+    # 2순위
+    if task_e.output.json_dict:
+        return InterviewScenarioSchema(**task_e.output.json_dict)
+
+    # 3순위: raw 문자열 파싱
+    raw = task_e.output.raw
+    raw = re.sub(r"```json\s*", "", raw)
+    raw = re.sub(r"```\s*", "", raw)
+    raw = raw.strip()
+
+    data = json.loads(raw)
+    return InterviewScenarioSchema(**data)
 
 @router.post("/evaluate")
 async def evaluate_answer(request: EvaluateRequest):
@@ -121,8 +144,8 @@ async def evaluate_answer(request: EvaluateRequest):
         raise HTTPException(status_code=500, detail=f"답변 평가 실패: {str(e)}")
 
 
-@router.post("/report")
-async def generate_report(request: ReportRequest):
+@router.post("/report", response_model=InterviewReportSchema, response_class=JSONResponse)
+async def generate_report(request: ReportRequest) -> InterviewReportSchema:
     """Phase 3: 전체 면접 로그 → 종합 리포트."""
     try:
         crew = create_report_crew()
@@ -135,6 +158,6 @@ async def generate_report(request: ReportRequest):
         )
 
         report = parse_crew_output(result, InterviewReportSchema)
-        return report.model_dump(by_alias=True)
+        return report
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"리포트 생성 실패: {str(e)}")

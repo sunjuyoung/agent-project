@@ -262,71 +262,86 @@ def create_preparation_crew(user_id: str) -> Crew:
             "   - 기준 난이도가 MEDIUM이면 EASY 1-2개 → MEDIUM 다수 → HARD 1-2개로 구성합니다.\n"
             "   - 기준 난이도가 HARD이면 MEDIUM 1-2개 → HARD 다수로 구성합니다.\n\n"
             "3. **질문별 상세 설계**:\n"
-            "   - 각 질문마다 다음을 포함해야 합니다:\n"
-            "     • 고유 ID (q1, q2, ... 형식)\n"
-            "     • 타겟 스킬 (어떤 기술/역량을 평가하는지)\n"
-            "     • 난이도 (EASY/MEDIUM/HARD)\n"
-            "     • 질문 텍스트 (구체적이고 명확한 한국어 질문)\n"
-            "     • 평가 기준 (이 질문으로 무엇을 평가하며, 좋은 답변의 조건)\n"
-            "     • 꼬리질문 가이드 (follow_up_guide)\n\n"
-            "4. **꼬리질문 가이드 설계 규칙 (중요)**:\n"
-            "   - 완성된 꼬리질문 텍스트를 작성하지 않습니다.\n"
-            "   - 대신 '탐색 방향(probe_direction)'과 '목적(purpose)'만 설계합니다.\n"
-            "   - 탐색 방향은 메인 질문의 평가 영역 내에서 깊이를 확인할 키워드/개념입니다.\n"
-            "   - 실제 꼬리질문은 Phase 2 면접 진행 시 후보자의 실제 답변을 보고 동적으로 생성됩니다.\n"
+            "   각 질문마다 아래 필드만 포함합니다. id 필드는 절대 추가하지 마세요:\n"
+            "   - category: 반드시 strength / weakness / behavioral 중 하나 (소문자)\n"
+            "   - skill_target: 평가 대상 기술/역량 (문자열)\n"
+            "   - difficulty: 반드시 EASY / MEDIUM / HARD 중 하나 (대문자)\n"
+            "   - text: 구체적이고 명확한 한국어 질문\n"
+            "   - evaluation_criteria: 평가 기준 객체 배열\n"
+            "   - follow_up_guide: 꼬리질문 가이드 객체\n\n"
+            "4. **evaluation_criteria 작성 규칙**:\n"
+            "   - 배열 안에 객체로 작성합니다.\n"
+            "   - 각 객체는 point(문자열)와 weight(HIGH/MEDIUM/LOW) 두 필드만 가집니다.\n"
+            "   - 질문당 2~3개 작성합니다.\n"
             "   - 예시:\n"
-            "     • probe_direction: '캐시 무효화 전략, TTL 설정 기준, 캐시 스탬피드 대응'\n"
-            "     • purpose: '캐싱의 실무 적용 깊이와 장애 대응 경험 확인'\n\n"
-            "5. **질문 품질 기준**:\n"
+            "     [\n"
+            "       {\"point\": \"트랜잭션 격리 수준의 종류를 명확히 설명할 수 있는가\", \"weight\": \"HIGH\"},\n"
+            "       {\"point\": \"실제 프로젝트 경험 기반으로 설명하는가\", \"weight\": \"MEDIUM\"}\n"
+            "     ]\n\n"
+            "5. **follow_up_guide 작성 규칙 (중요)**:\n"
+            "   - probe_direction: 반드시 문자열 배열(list)로 작성합니다. 쉼표로 연결한 단일 문자열 금지.\n"
+            "   - 올바른 예시: [\"캐시 무효화 전략\", \"TTL 설정 기준\", \"캐시 스탬피드 대응\"]\n"
+            "   - 잘못된 예시: \"캐시 무효화 전략, TTL 설정 기준, 캐시 스탬피드 대응\"\n"
+            "   - purpose: 꼬리질문 방향의 목적을 한 문장으로 작성합니다.\n"
+            "   - 완성된 꼬리질문 텍스트는 작성하지 않습니다. (Phase 2에서 동적 생성)\n\n"
+            "6. **질문 품질 기준**:\n"
             "   - 이력서 프로젝트 경험을 직접 언급하는 질문을 2~3개 포함합니다.\n"
-            "   - '~에 대해 설명해주세요'와 같은 단순 지식 질문보다 "
-            "'~상황에서 어떻게 해결하셨나요?'와 같은 경험 기반 질문을 선호합니다.\n"
+            "   - '~에 대해 설명해주세요' 같은 단순 지식 질문보다 "
+            "'~상황에서 어떻게 해결하셨나요?' 같은 경험 기반 질문을 선호합니다.\n"
             "   - 각 질문은 서로 중복되지 않는 독립적인 평가 영역을 다뤄야 합니다.\n\n"
-            "**주의사항:**\n"
-            "- Task D의 후보자 프로필 데이터를 반드시 참조하여 질문을 설계하세요.\n"
-            "- 후보자 프로필의 skill_matrix와 interview_strategy를 질문 설계에 활용하세요.\n"
-            "- 질문은 모두 한국어로 작성하세요.\n"
-            "- 평가 기준은 면접관이 즉시 활용할 수 있을 만큼 구체적이어야 합니다."
+            "**절대 금지 사항:**\n"
+            "- questions 배열 내 각 객체에 id 필드 추가 금지\n"
+            "- probe_direction을 쉼표 구분 단일 문자열로 작성 금지\n"
+            "- 숫자 필드(total_questions, strength, weakness, behavioral)를 문자열로 반환 금지\n"
+            "- distribution 합계는 반드시 total_questions와 일치해야 합니다.\n\n"
+            "**참조 필수:**\n"
+            "- Task D의 skill_matrix와 interview_strategy를 질문 설계에 반드시 활용하세요.\n"
+            "- 질문(text)은 모두 한국어로 작성하세요.\n"
         ),
         expected_output="""
-다음 형식의 JSON:
-{
-    "scenario": {
-        "total_questions": "총 질문 수",
-        "difficulty_base": "EASY", "MEDIUM", "HARD",
-        "distribution": {
-            "strength": "강점 질문 수",
-            "weakness": "약점 질문 수",
-            "behavioral": "행동 질문 수"
-        },
-        "questions": [
-            {
-                "category": "strength", "weakness", "behavioral",
-                "skill_target": "평가 대상 기술/역량",
-                "difficulty": "EASY", "MEDIUM", "HARD",
-                "text": "면접 질문 텍스트 (한국어)",
-                "evaluation_criteria": [
-                    {
-                        "point": "SAGA 패턴의 보상 트랜잭션 개념을 정확히 이해하고 있는가",
-                        "weight": "HIGH"
-                    },
-                    {
-                        "point": "실제 구현 경험 기반으로 구체적으로 설명하는가",
-                        "weight": "MEDIUM"
+    반드시 아래 JSON 구조를 정확히 따르세요.
+
+    {
+        "scenario": {
+            "total_questions": 5,
+            "difficulty_base": "MEDIUM",
+            "distribution": {
+                "strength": 2,
+                "weakness": 2,
+                "behavioral": 1
+            },
+            "questions": [
+                {
+                    "category": "strength",
+                    "skill_target": "Spring Boot 트랜잭션 관리",
+                    "difficulty": "EASY",
+                    "text": "Growple 프로젝트에서 SAGA 패턴을 적용하셨는데, 분산 트랜잭션 실패 시 보상 트랜잭션을 어떻게 설계하셨나요?",
+                    "evaluation_criteria": [
+                        {
+                            "point": "SAGA 패턴의 보상 트랜잭션 개념을 정확히 이해하고 있는가",
+                            "weight": "HIGH"
+                        },
+                        {
+                            "point": "실제 구현 경험 기반으로 구체적으로 설명하는가",
+                            "weight": "MEDIUM"
+                        }
+                    ],
+                    "follow_up_guide": {
+                        "probe_direction": ["이벤트 순서 보장", "멱등성 처리", "실패 감지 방식"],
+                        "purpose": "분산 트랜잭션 장애 시나리오에 대한 실무 대응 깊이 확인"
                     }
-                ],
-                "follow_up_guide": {
-                    "probe_direction": "탐색할 키워드/개념 (쉼표 구분)",
-                    "purpose": "이 방향으로 꼬리질문하는 목적"
                 }
-            }
-        ]
+            ]
+        }
     }
-}
-""",
+
+    주의:
+    - probe_direction은 문자열 배열
+    - total_questions, strength, weakness, behavioral 은 정수
+    """,
+        output_json=InterviewScenarioSchema,
         agent=planner,
-        output_json=InterviewScenarioSchema, 
-        context=[task_d]
+        context=[task_d],
     )
 
     return Crew(
